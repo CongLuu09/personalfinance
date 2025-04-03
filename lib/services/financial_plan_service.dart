@@ -52,4 +52,25 @@ class FinancialPlanService {
     final db = await _db;
     return await db.delete('financial_plans', where: 'id = ?', whereArgs: [id]);
   }
+
+
+  Future<int> updatePlan(FinancialPlan plan) async {
+    final db = await _db;
+    return await db.update(
+      'financial_plans',
+      plan.toMap(),
+      where: 'id = ?',
+      whereArgs: [plan.id],
+    );
+  }
+
+
+  Future<FinancialPlan?> getPlanById(String id) async {
+    final db = await _db;
+    var result = await db.query('financial_plans', where: 'id = ?', whereArgs: [id]);
+    if (result.isNotEmpty) {
+      return FinancialPlan.fromMap(result.first);
+    }
+    return null;
+  }
 }
